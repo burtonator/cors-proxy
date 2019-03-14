@@ -38,9 +38,9 @@ exports.cors = functions.https.onRequest((req, res) => {
     console.log('Request:', url);
 
     // disallow blocked phrases
-    if (url.match(blockedPhrases)) {
-      res.status(403).send('Phrase in URL is disallowed.');
-    }
+    // if (url.match(blockedPhrases)) {
+    //   res.status(403).send('Phrase in URL is disallowed.');
+    // }
 
     fetch(url, {
       method: req.method,
