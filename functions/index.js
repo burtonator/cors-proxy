@@ -87,5 +87,7 @@ exports.cors = functions.https.onRequest((req, res) => {
             res.setHeader('x-proxied-url', url);
             res.status(500).send('Forbidden');
         });
+
     });
+
 });
