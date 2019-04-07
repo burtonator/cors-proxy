@@ -1,8 +1,23 @@
 const functions = require('firebase-functions');
 const cors = require('cors')({
     origin: true,
-    allowedHeaders: ["Range"],
-    exposedHeaders: ["Content-Length", "Date", "Server", "Transfer-Encoding", "X-GUploader-UploadID", "X-Google-Trace"]
+    allowedHeaders: [
+        "Range"
+    ],
+    exposedHeaders: [
+        "Accept-Ranges",
+        "Content-Encoding",
+        "Content-Length",
+        "Content-Range",
+        "Content-Type",
+        "Date",
+        "Range",
+        "Server",
+        "Transfer-Encoding",
+        "Transfer-Encoding",
+        "X-Google-Trace",
+        "X-GUploader-UploadID",
+    ]
 });
 const fetch = require('node-fetch');
 
