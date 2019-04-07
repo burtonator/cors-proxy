@@ -80,16 +80,18 @@ function getHostname(url) {
 }
 
 exports.cors = functions.https.onRequest((req, res) => {
+
     cors(req, res, () => {
 
-        try {
+        // Grab URL from URI or Req. Body:
+        const url = getURL(req);
 
-            // Grab URL from URI or Req. Body:
-            let url = getURL(req);
-            if (!url) {
-                res.status(403).send('Endpoint URL not specified.');
-                return;
-            }
+        if (!url) {
+            res.status(403).send('Endpoint URL not specified.');
+            return;
+        }
+
+        try {
 
             const reqOrigin = getOriginOrHost(req);
             const reqDest = getHostname(reqOrigin);
