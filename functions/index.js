@@ -33,25 +33,69 @@ function handleException(res, err, url) {
 
 }
 
+function getURL(req) {
+
+    if (req.query && req.query.url) {
+        return req.query.url;
+    }
+
+    if (req.body && req.body.url) {
+        return req.body.url;
+    }
+
+    return undefined;
+
+}
+
+
+/**
+ *
+ *
+ * @param value string | string[] | undefined
+ * @return string | undefined
+ */
+function hdr(value) {
+
+    if (typeof value === 'string') {
+        return value;
+    }
+
+    if (Array.isArray(value)) {
+        return value[0];
+    }
+
+    return undefined;
+
+};
+
+function getOriginOrHost(req) {
+
+    return hdr(req.headers.origin) || hdr(req.headers.host);
+
+}
+
+function getHostname(url) {
+    const parsedURL = new URL(url);
+    return parsedURL.hostname;
+}
+
 exports.cors = functions.https.onRequest((req, res) => {
     cors(req, res, () => {
 
         try {
 
             // Grab URL from URI or Req. Body:
-            let url = !req.query.url ? req.body.url : req.query.url;
+            let url = getURL(req);
             if (!url) {
                 res.status(403).send('Endpoint URL not specified.');
                 return;
             }
 
-            // Validate request origin and destination endpoints with whitelist:
-            const regexHostname = /(?:http(?:s)?:\/\/)?(((\S+)(?:.(com|net|edu|org|app)|:\d+)))/;
-            const reqOrigin = (req.headers.origin || req.headers.host).match(
-                regexHostname
-            )[1];
-            const reqDest = url.match(regexHostname)[1];
+            const reqOrigin = getOriginOrHost(req);
+            const reqDest = getHostname(reqOrigin);
+
             console.log(reqOrigin, reqDest);
+
             if (
                 (!endpoint_whitelist.includes('*') &&
                     !endpoint_whitelist.includes(reqDest)) ||
